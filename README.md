@@ -76,4 +76,4 @@ gcloud run deploy donow-ai \
 
 ## 👩‍💻 Built By
 
-*Puja* · RGUKT CSE AI/ML · Vibe2Ship Hackathon 2026
+*Puja Sinha* · CSE AI/ML · Vibe2Ship Hackathon 2026
