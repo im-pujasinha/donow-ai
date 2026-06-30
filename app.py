@@ -3,10 +3,20 @@ import google.generativeai as genai
 import json
 import re
 import time
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
+
+# IST is UTC+5:30
+IST = timezone(timedelta(hours=5, minutes=30))
+
+def now_ist():
+    return datetime.now(IST)
 
 # ── CONFIG ────────────────────────────────────────────────────────────────────
-GEMINI_API_KEY = "PASTE KEY HERE"  # ← paste your key here
+# Tries Streamlit secrets first (for Streamlit Cloud), falls back to hardcoded key (for local testing)
+try:
+    GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+except Exception:
+    GEMINI_API_KEY = "PASTE_YOUR_KEY_HERE"  # ← paste your key here for local testing
 
 genai.configure(api_key=GEMINI_API_KEY)
 model = genai.GenerativeModel("gemini-2.5-flash")
@@ -484,7 +494,7 @@ def ai_analyze(tasks_text: str, time_of_day: str) -> dict:
 You are DoNow — a blunt, no-nonsense AI built for a CS student who procrastinates by 
 can't-start paralysis and social media distraction.
 
-Current time: {datetime.now().strftime("%A %I:%M %p")} ({time_of_day})
+Current time: {now_ist().strftime("%A %I:%M %p")} ({time_of_day})
 Tasks entered:
 {tasks_text}
 
@@ -525,7 +535,7 @@ Current tasks:
 {task_summary}
 
 Active task right now: {active_task or 'None - they have not started yet'}
-Time: {datetime.now().strftime("%I:%M %p")}
+Time: {now_ist().strftime("%I:%M %p")}
 
 User says: "{msg}"
 
@@ -564,7 +574,7 @@ HH:MM | Task name or Break
 
 
 # ── TOPBAR ────────────────────────────────────────────────────────────────────
-now = datetime.now()
+now = now_ist()
 st.markdown(f"""
 <div class='topbar'>
   <div class='logo'>Do<span>Now</span></div>
