@@ -546,7 +546,9 @@ If they need help starting, give the ONE specific action. No bullet lists.
         resp = model.generate_content(prompt)
         return resp.text.strip()
     except Exception as e:
-        return f"Error: {e}"
+        if "429" in str(e) or "quota" in str(e).lower():
+            return "I've hit my daily thinking limit (free tier cap) - give it a few minutes and try again. Meanwhile: pick your most urgent task and just open the file. That's the move."
+        return "Something glitched on my end. Try again in a moment."
 
 
 def ai_schedule(tasks: list, start_hour: int) -> str:
